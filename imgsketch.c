@@ -4,7 +4,7 @@
 #include <string.h>
 #include "pngfile.h"
 #include "sketcher.h"
-#include "../lib/bar.h"
+#include "lib/bar.h"
 
 int main(int argc, char** argv) {	
 	if(argc <= 1) {
@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 		
 	struct color* colors = sk_source_colors(image_data);
 	
-	long int iterations = 100000000L;
+	long int iterations = 500000L;
 	start_stopwatch();
 	for(int i = 0; i < iterations; i++) {
 		int x1Rand = rand()%(image_data.width-1);
