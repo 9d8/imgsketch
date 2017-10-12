@@ -12,8 +12,8 @@ set(PROGRAM_MINOR_VERSION 0)
 set(PROGRAM_PATCH_VERSION 0)
 #configure_file(include/config.h.in ${INCLUDE_DIR}/config.h)
 
-file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.c)
-include_directories(${INCLUDE_DIR} include)
+file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.c lib/bar.c)
+include_directories(${INCLUDE_DIR} include lib)
 	
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 target_link_libraries(${PROJECT_NAME} png m)

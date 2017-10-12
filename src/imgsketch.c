@@ -4,6 +4,7 @@
 #include <string.h>
 #include "pngfile.h"
 #include "sketcher.h"
+#include "../lib/bar.h"
 
 int main(int argc, char** argv) {	
 	if(argc <= 1) {
@@ -35,7 +36,9 @@ int main(int argc, char** argv) {
 	struct png_data empty;
 	create_empty_png_data(&empty, image_data.width, image_data.height);
 	
-	for(int i = 0; i < 1000000; i++) {
+	long int iterations = 10000000L;
+	start_stopwatch();
+	for(int i = 0; i < iterations; i++) {
 		int x1Rand = rand()%(image_data.width-1);
 		int x2Rand = rand()%(image_data.width-1);
 		int y1Rand = rand()%(image_data.height-1);
@@ -51,6 +54,9 @@ int main(int argc, char** argv) {
 		}
 		
 		delete_point_shape(pl);
+
+		printf("Creating sketch... ");
+		print_bar(50, i, iterations);
 	}
 
 	FILE* fp;
