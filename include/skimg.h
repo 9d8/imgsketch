@@ -1,7 +1,7 @@
 #ifndef SKIMG_H_
 #define SKIMG_H_
 
-#include "pnggrid.h"
+#include "pixmap.h"
 #include "color.h"
 
 struct color sk_get_point_color(struct png_data d, int x, int y);

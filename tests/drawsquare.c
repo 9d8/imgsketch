@@ -3,7 +3,7 @@
 #include "pngfile.h"
 
 int main() {	
-	struct point_list* pl = sketch_segment(1, 0, 0, 0, 1);
+	struct point_list* pl = sketch_rectangle(50, 0, 5, 5, 100, 100);
 	struct point_list* curr = pl;
 
 	while(curr != NULL) {

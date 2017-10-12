@@ -4,6 +4,7 @@
 #include <string.h>
 #include "pngfile.h"
 #include "sketcher.h"
+#include "presets.h"
 #include "lib/bar.h"
 
 int main(int argc, char** argv) {	
@@ -37,28 +38,13 @@ int main(int argc, char** argv) {
 		
 	struct color* colors = sk_source_colors(image_data);
 	
-	long int iterations = 500000L;
+	long int iterations = 100000000L;
 	start_stopwatch();
 	for(int i = 0; i < iterations; i++) {
-		int x1Rand = rand()%(image_data.width-1);
-		int x2Rand = x1Rand + (rand()%20 - 10);
-		int y1Rand = rand()%(image_data.height-1);
-		int y2Rand = y1Rand + (rand()%20 - 10);
 		int colorIndex = rand()%(image_data.width*image_data.height - 1);
 	
-		if(x2Rand < 0) {
-			x2Rand = 0;
-		} else if(x2Rand >= image_data.width) {
-			x2Rand = image_data.width - 1;
-		}
-		
-		if(y2Rand < 0) {
-			y2Rand = 0;
-		} else if(y2Rand >= image_data.height) {
-			y2Rand = image_data.height - 1;
-		}
-		
-		struct point_list* pl = sketch_segment(x1Rand, y1Rand, x2Rand, y2Rand, 1);
+		struct point_list* pl = random_square(image_data.width, image_data.height);
+		//random_segment(20, image_data.width, image_data.height);
 
 		if(skclrcmp(image_data, colors[colorIndex], pl) < skcmp(image_data, empty, pl)) {
 			draw_point_shape(&empty, pl, colors[colorIndex]);
