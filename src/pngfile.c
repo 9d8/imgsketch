@@ -83,8 +83,6 @@ int get_png_data(FILE* png_file, struct png_data* data) {
 	}
 
 	png_read_image(png, row_pointers);
-
-	printf("%i %i %i %i\n", row_pointers[0][0], row_pointers[0][1], row_pointers[0][2], row_pointers[0][3]);
 	
 	data->width = width;
 	data->height = height;
@@ -98,12 +96,46 @@ void create_empty_png_data(struct png_data* data, int width, int height) {
 	png_bytepp row_pointers = malloc(sizeof(png_bytep) * height);
 	for(int y = 0; y < height; y++) {
 		//technically this is hard coding :(
-		row_pointers[y] = calloc(width, 4);
+		row_pointers[y] = calloc(width, 4*sizeof(uint8_t));
 	}
 
 	data->width = width;
 	data->height = height;
-	data->rows = (unsigned char**) row_pointers;
+	data->rows = row_pointers;
+}
+
+int create_png(struct png_data* data, FILE* image) {
+	png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if(!png_ptr) {
+		fclose(image);
+		return 1;
+	}
+
+    png_infop info_ptr = png_create_info_struct(png_ptr);
+    if(!info_ptr) {
+		png_destroy_write_struct(&png_ptr, NULL);
+		fclose(image);
+		return 1;
+    }
+
+	if(setjmp(png_jmpbuf(png_ptr))) {
+		png_destroy_write_struct(&png_ptr, &info_ptr);
+		fclose(image);
+		return 1;
+    }
+
+	png_init_io(png_ptr, image);
+
+	png_set_IHDR(png_ptr, info_ptr, data->width, data->height, 8, 
+		PNG_COLOR_TYPE_RGB_ALPHA,
+		PNG_INTERLACE_NONE,
+		PNG_COMPRESSION_TYPE_DEFAULT,
+		PNG_FILTER_TYPE_DEFAULT);
+	
+	png_bytepp row_pointers = data->rows;
+
+ 	png_set_rows(png_ptr, info_ptr, row_pointers);
+	png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 }
 
 void destroy_png_data(struct png_data* data) {	

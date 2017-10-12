@@ -1,10 +1,12 @@
 #ifndef PNGGRID_H_
 #define PNGGRID_H_
 
+#include <stdint.h>
+
 struct png_data {
 	int width;
 	int height;
-	unsigned char** rows;
+	uint8_t** rows;
 };
 
 struct point_list {
