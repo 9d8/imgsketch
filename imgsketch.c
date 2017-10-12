@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
 		
 	struct color* colors = sk_source_colors(image_data);
 	
-	long int iterations = 100000000L;
+	long int iterations = 1000000L;
 	start_stopwatch();
 	for(int i = 0; i < iterations; i++) {
 		int colorIndex = rand()%(image_data.width*image_data.height - 1);
@@ -51,6 +51,19 @@ int main(int argc, char** argv) {
 		}
 		
 		delete_point_shape(pl);
+		
+		if(i%10000 == 0) {
+			FILE* fp;
+			char name[15];
+			sprintf(name, "cache/%003i.png", i/10000);
+
+			if((fp = fopen(name, "wb")) == NULL) {
+				return 1;
+			}
+
+			create_png(&empty, fp);
+			fclose(fp);
+		}
 
 		printf("Creating sketch... ");
 		print_bar(50, i, iterations);
