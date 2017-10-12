@@ -29,25 +29,36 @@ int main(int argc, char** argv) {
 	get_png_data(image, &image_data);
 
 	printf("This is a png file with dimentions %ix%i\n", image_data.width, image_data.height);
-	//printf("%i %i %i %i\n", image_data.rows[182][4], image_data.rows[182][5], image_data.rows[182][6], image_data.rows[182][7]);
 
 	srand(time(NULL));
 
 	struct png_data empty;
 	create_empty_png_data(&empty, image_data.width, image_data.height);
+		
+	struct color* colors = sk_source_colors(image_data);
 	
-	long int iterations = 10000000L;
+	long int iterations = 100000000L;
 	start_stopwatch();
 	for(int i = 0; i < iterations; i++) {
 		int x1Rand = rand()%(image_data.width-1);
-		int x2Rand = rand()%(image_data.width-1);
+		int x2Rand = x1Rand + (rand()%20 - 10);
 		int y1Rand = rand()%(image_data.height-1);
-		int y2Rand = rand()%(image_data.height-1);
+		int y2Rand = y1Rand + (rand()%20 - 10);
 		int colorIndex = rand()%(image_data.width*image_data.height - 1);
+	
+		if(x2Rand < 0) {
+			x2Rand = 0;
+		} else if(x2Rand >= image_data.width) {
+			x2Rand = image_data.width - 1;
+		}
+		
+		if(y2Rand < 0) {
+			y2Rand = 0;
+		} else if(y2Rand >= image_data.height) {
+			y2Rand = image_data.height - 1;
+		}
 		
 		struct point_list* pl = sketch_segment(x1Rand, y1Rand, x2Rand, y2Rand, 1);
-		struct point_list* curr = pl;
-		struct color* colors = sk_source_colors(image_data);
 
 		if(skclrcmp(image_data, colors[colorIndex], pl) < skcmp(image_data, empty, pl)) {
 			draw_point_shape(&empty, pl, colors[colorIndex]);
@@ -66,11 +77,6 @@ int main(int argc, char** argv) {
 
 	create_png(&empty, fp);
 	fclose(fp);
-
-//	while(curr != NULL) {
-//		printf("(%i, %i) ", curr->x, curr->y);
-//		curr = curr->next;
-//	}
 
 	printf("\n");
 

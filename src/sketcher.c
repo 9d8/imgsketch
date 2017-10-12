@@ -13,8 +13,7 @@ struct point_list* sketch_segment(int x1, int y1, int x2, int y2, int width) {
 		//a single point will be made at (x2, y2) if x1 == x2
 		m = 1;
 	}
-
-		
+	
 	int xMin = x1 < x2? x1 : x2;
 	int xMax = x1 < x2? x2 : x1;
 
