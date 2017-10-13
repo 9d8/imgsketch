@@ -15,7 +15,7 @@ int is_png(FILE* file) {
 	return result;
 }
 
-int get_img_data(FILE* png_file, struct img_data* data) {
+int get_png_data(FILE* png_file, struct img_data* data) {
 	png_uint_32 width;
 	png_uint_32 height;
 	png_byte color_type;
@@ -91,19 +91,6 @@ int get_img_data(FILE* png_file, struct img_data* data) {
 	return 0;
 }
 
-//We may be able to improve upon this once I figure out how to write to a png file
-void create_empty_img_data(struct img_data* data, int width, int height) {
-	png_bytepp row_pointers = malloc(sizeof(png_bytep) * height);
-	for(int y = 0; y < height; y++) {
-		//technically this is hard coding :(
-		row_pointers[y] = calloc(width, 4*sizeof(uint8_t));
-	}
-
-	data->width = width;
-	data->height = height;
-	data->rows = row_pointers;
-}
-
 int create_png(struct img_data* data, FILE* image) {
 	png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if(!png_ptr) {
@@ -136,11 +123,4 @@ int create_png(struct img_data* data, FILE* image) {
 
  	png_set_rows(png_ptr, info_ptr, row_pointers);
 	png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
-}
-
-void destroy_img_data(struct img_data* data) {	
-	for(int y = 0; y < data->height; y++) {
-		free(data->rows[y]);
-	}
-	free(data->rows);
 }

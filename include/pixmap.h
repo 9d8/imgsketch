@@ -15,4 +15,7 @@ struct point_list {
 	struct point_list* next;
 };
 
+void create_empty_img_data(struct img_data* data, int width, int height);
+void destroy_img_data(struct img_data* data);
+
 #endif
