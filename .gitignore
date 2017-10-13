@@ -1,4 +1,7 @@
 *.swp
 *.png
+*.jpg
 build/
 cache/*
+
+!markdown/*.png

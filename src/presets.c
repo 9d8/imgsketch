@@ -25,10 +25,10 @@ struct point_list* random_segment(int minlen, int maxlen, int width, int height)
 	return sketch_segment(x1Rand, y1Rand, x2Rand, y2Rand, 1);
 }
 
-struct point_list* random_square(int maxlen, int width, int height) {
+struct point_list* random_square(int minlen, int maxlen, int width, int height) {
 	int xRand = rand()%(width-1);
 	int yRand = rand()%(height-1);
-	int sRand = rand()%maxlen;
+	int sRand = rand()%(maxlen - minlen + 1) + minlen;
 
 	return sketch_rectangle(xRand, yRand, sRand, sRand, width, height);
 }
