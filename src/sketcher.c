@@ -95,7 +95,7 @@ struct point_list* sketch_rectangle(int x, int y, int width, int height, int x_b
 	return dummy.next;
 }
 
-void draw_point_shape(struct png_data* image, struct point_list* shape, struct color color) {
+void draw_point_shape(struct img_data* image, struct point_list* shape, struct color color) {
 	struct point_list* curr = shape;
 
 	while(curr != NULL) {

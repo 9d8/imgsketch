@@ -11,8 +11,8 @@ int main() {
 		curr = curr->next;
 	}
 	
-	struct png_data empty;
-	create_empty_png_data(&empty, 100, 100);
+	struct img_data empty;
+	create_empty_img_data(&empty, 100, 100);
 			
 	struct color red;
 	red.red = 255;
@@ -32,7 +32,7 @@ int main() {
 
 	printf("\n");
 	delete_point_shape(pl);
-	destroy_png_data(&empty);
+	destroy_img_data(&empty);
 
 	return 0;
 }

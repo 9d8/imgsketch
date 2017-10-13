@@ -1,7 +1,7 @@
 #include "skimg.h"
 #include <stdio.h>
 
-struct color sk_get_point_color(struct png_data d, int x, int y) {
+struct color sk_get_point_color(struct img_data d, int x, int y) {
 	struct color color; 
 
 	int rowX = x * 4;
@@ -14,7 +14,7 @@ struct color sk_get_point_color(struct png_data d, int x, int y) {
 	return color;
 }
 
-void sk_set_point_color(struct png_data* d, int x, int y, struct color color) {
+void sk_set_point_color(struct img_data* d, int x, int y, struct color color) {
 	int rowX = x * 4;
 
 	d->rows[y][rowX] = color.red;
@@ -23,7 +23,7 @@ void sk_set_point_color(struct png_data* d, int x, int y, struct color color) {
 	d->rows[y][rowX + 3] = color.alpha;
 }
 
-struct color* sk_source_colors(struct png_data source) {
+struct color* sk_source_colors(struct img_data source) {
 	struct color source_colors[source.height*source.width];
 	int i = 0;
 
@@ -39,7 +39,7 @@ struct color* sk_source_colors(struct png_data source) {
 }
 
 
-int skcmp(struct png_data source, struct png_data sketch, struct point_list* cmp_points) {
+int skcmp(struct img_data source, struct img_data sketch, struct point_list* cmp_points) {
 	int score = 0;
 		
 	struct point_list* curr = cmp_points;
@@ -57,7 +57,7 @@ int skcmp(struct png_data source, struct png_data sketch, struct point_list* cmp
 	return score;
 }
 
-int skclrcmp(struct png_data source, struct color sketch_color, struct point_list* cmp_points) {
+int skclrcmp(struct img_data source, struct color sketch_color, struct point_list* cmp_points) {
 	int score = 0;
 		
 	struct point_list* curr = cmp_points;

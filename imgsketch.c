@@ -28,15 +28,15 @@ int main(int argc, char** argv) {
 		return 3;
 	}
 
-	struct png_data image_data;
-	get_png_data(image, &image_data);
+	struct img_data image_data;
+	get_img_data(image, &image_data);
 
 	printf("This is a png file with dimentions %ix%i\n", image_data.width, image_data.height);
 
 	srand(time(NULL));
 
-	struct png_data empty;
-	create_empty_png_data(&empty, image_data.width, image_data.height);
+	struct img_data empty;
+	create_empty_img_data(&empty, image_data.width, image_data.height);
 		
 	struct color* colors = sk_source_colors(image_data);
 	
@@ -54,10 +54,11 @@ int main(int argc, char** argv) {
 		
 		delete_point_shape(pl);
 		
-		if(as.sequence_mode && i%10000 == 0) {
+		//thread???
+		if(as.sequence_mode && i%1600 == 0) {
 			FILE* fp;
 			char name[15];
-			sprintf(name, "cache/%003i.png", i/10000);
+			sprintf(name, "cache/%003i.png", i/1600);
 
 			if((fp = fopen(name, "wb")) == NULL) {
 				return 1;
@@ -81,8 +82,8 @@ int main(int argc, char** argv) {
 
 	printf("\n");
 
-	destroy_png_data(&image_data);
-	destroy_png_data(&empty);
+	destroy_img_data(&image_data);
+	destroy_img_data(&empty);
 	fclose(image);
 
 	return 0;

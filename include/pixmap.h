@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-struct png_data {
+struct img_data {
 	int width;
 	int height;
 	uint8_t** rows;
