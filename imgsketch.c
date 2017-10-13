@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
 	for(int i = 0; i < as.iterations; i++) {
 		int colorIndex = rand()%(image_data.width*image_data.height - 1);
 	
-		struct point_list* pl = random_square(10, 40, image_data.width, image_data.height);
+		struct point_list* pl = random_square(as.min_size, as.max_size, image_data.width, image_data.height);
 		//struct point_list* pl = random_circle(5, 20, image_data.width, image_data.height);
 		//struct point_list* pl = random_segment(5, 20, image_data.width, image_data.height);
 

@@ -6,6 +6,8 @@ struct arg_settings {
 	char* outfile;
 	long int iterations;
 	int sequence_mode;
+	unsigned int min_size;
+	unsigned int max_size;
 };
 
 int parse_args(int argc, char** argv, struct arg_settings* as);
