@@ -109,6 +109,32 @@ void draw_point_shape(struct png_data* image, struct point_list* shape, struct c
 	}
 }
 
+struct point_list* sketch_circle(int x, int y, int radius, int x_bound, int y_bound) {
+	struct point_list dummy;
+	struct point_list* curr = &dummy;
+	dummy.next = NULL;
+	
+	for(int h=-radius; h<=radius; h++) {
+		for(int w=-radius; w<=radius; w++) {
+			if(w*w+h*h <= radius*radius + radius 
+					&& x - radius >= 0 && x + radius < x_bound
+					&& y - radius >= 0 && y + radius < y_bound) {
+				struct point_list* node = malloc(sizeof(struct point_list));
+				
+				node->x = x + w;
+				node->y = y + h;
+
+				curr->next = node;
+				curr = curr->next;
+			}
+		}
+	}
+
+	
+	curr->next = NULL;
+	return dummy.next;
+}	
+
 void delete_point_shape(struct point_list* shape) {
 	struct point_list* curr = shape;
 	struct point_list* next;

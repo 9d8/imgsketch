@@ -1,23 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <string.h>
 #include "pngfile.h"
 #include "sketcher.h"
 #include "presets.h"
 #include "lib/bar.h"
+#include "arguments.h"
 
 int main(int argc, char** argv) {	
-	if(argc <= 1) {
-		return 1;
+	
+	struct arg_settings as;
+	if(parse_args(argc, argv, &as)) {
+		printf("Need path argument");
+		return 1;	
 	}
+
 	
-	const char* path = *(++argv);
-	
-	FILE* image = fopen(path, "rb");
+	FILE* image = fopen(as.infile, "rb");
 
 	if(image == NULL) {	
-		printf("%s does not exist\n", path);
+		printf("%s does not exist\n", as.infile);
 		return 2;
 	}
 
@@ -38,13 +40,13 @@ int main(int argc, char** argv) {
 		
 	struct color* colors = sk_source_colors(image_data);
 	
-	long int iterations = 1000000L;
 	start_stopwatch();
-	for(int i = 0; i < iterations; i++) {
+	for(int i = 0; i < as.iterations; i++) {
 		int colorIndex = rand()%(image_data.width*image_data.height - 1);
 	
-		struct point_list* pl = random_square(image_data.width, image_data.height);
-		//random_segment(20, image_data.width, image_data.height);
+		//struct point_list* pl = random_square(image_data.width, image_data.height);
+		struct point_list* pl = random_circle(5, 20, image_data.width, image_data.height);
+		//struct point_list* pl = random_segment(5, 20, image_data.width, image_data.height);
 
 		if(skclrcmp(image_data, colors[colorIndex], pl) < skcmp(image_data, empty, pl)) {
 			draw_point_shape(&empty, pl, colors[colorIndex]);
@@ -52,7 +54,7 @@ int main(int argc, char** argv) {
 		
 		delete_point_shape(pl);
 		
-		if(i%10000 == 0) {
+		if(as.sequence_mode && i%10000 == 0) {
 			FILE* fp;
 			char name[15];
 			sprintf(name, "cache/%003i.png", i/10000);
@@ -66,11 +68,11 @@ int main(int argc, char** argv) {
 		}
 
 		printf("Creating sketch... ");
-		print_bar(50, i, iterations);
+		print_bar(50, i, as.iterations);
 	}
 
 	FILE* fp;
-	if((fp = fopen("file.png", "wb")) == NULL) {
+	if((fp = fopen(as.outfile, "wb")) == NULL) {
 		return 1;
 	}
 
@@ -80,6 +82,7 @@ int main(int argc, char** argv) {
 	printf("\n");
 
 	destroy_png_data(&image_data);
+	destroy_png_data(&empty);
 	fclose(image);
 
 	return 0;
