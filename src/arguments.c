@@ -14,7 +14,7 @@ char* help_string = "Usage: imgsketch [OPTIONS] png\n"
 					" -m\t\tMinimum shape size. (default: 5)\n"
 					" -M\t\tMaximum shape size. (default: 20)\n";
 
-int parse_args(int argc, char** argv, struct arg_settings* as) {
+int arguments_parse(int argc, char** argv, struct arg_settings* as) {
 	char* optstring = "l:shm:M:";
 	as->iterations = 1000000;
 	as->sequence_mode = 0;

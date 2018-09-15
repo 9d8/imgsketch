@@ -2,7 +2,7 @@
 #include <png.h>
 #include <stdlib.h>
 
-int is_png(FILE* file) {
+int pngfile_is_png(FILE* file) {
 	int result = 1;
 
 	rewind(file);	
@@ -15,7 +15,7 @@ int is_png(FILE* file) {
 	return result;
 }
 
-int get_png_data(FILE* png_file, struct img_data* data) {
+int pngfile_get_data(FILE* png_file, struct imagedata* data) {
 	png_uint_32 width;
 	png_uint_32 height;
 	png_byte color_type;
@@ -91,7 +91,7 @@ int get_png_data(FILE* png_file, struct img_data* data) {
 	return 0;
 }
 
-int create_png(struct img_data* data, FILE* image) {
+int pngfile_create(struct imagedata* data, FILE* image) {
 	png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if(!png_ptr) {
 		fclose(image);

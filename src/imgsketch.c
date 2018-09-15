@@ -10,11 +10,10 @@
 int main(int argc, char** argv) {	
 	
 	struct arg_settings as;
-	if(parse_args(argc, argv, &as)) {
+	if(arguments_parse(argc, argv, &as)) {
 		printf("Need path argument.\n");
 		return 1;	
 	}
-
 	
 	FILE* image = fopen(as.infile, "rb");
 
@@ -23,36 +22,36 @@ int main(int argc, char** argv) {
 		return 2;
 	}
 
-	if(!is_png(image)) {
+	if(!pngfile_is_png(image)) {
 		printf("%s is not a png file.\n", as.infile);
 		return 3;
 	}
 
-	struct img_data image_data;
-	get_png_data(image, &image_data);
+	struct imagedata input_image;
+	pngfile_get_data(image, &input_image);
 
-	printf("This is a png file with dimentions %ix%i.\n", image_data.width, image_data.height);
+	printf("This is a png file with dimentions %ix%i.\n", input_image.width, input_image.height);
 
 	srand(time(NULL));
 
-	struct img_data empty;
-	create_empty_img_data(&empty, image_data.width, image_data.height);
+	struct imagedata canvas;
+	imagedata_create_empty(&canvas, input_image.width, input_image.height);
 		
-	struct color* colors = sk_source_colors(image_data);
+	struct color* source_colors = skutil_source_colors(input_image);
 	
-	start_stopwatch();
+	bar_start_stopwatch();
 	for(int i = 0; i < as.iterations; i++) {
-		int colorIndex = rand()%(image_data.width*image_data.height - 1);
+		int colorIndex = rand()%(input_image.width*input_image.height - 1);
 	
-		//struct point_list* pl = random_square(as.min_size, as.max_size, image_data.width, image_data.height);
-		//struct point_list* pl = random_circle(5, 20, image_data.width, image_data.height);
-		struct point_list* pl = random_segment(5, 20, image_data.width, image_data.height);
+		//struct point_list* pl = random_square(as.min_size, as.max_size, input_image.width, input_image.height);
+		//struct point_list* pl = random_circle(5, 20, input_image.width, input_image.height);
+		struct point_list* pl = presets_random_segment(5, 20, input_image.width, input_image.height);
 
-		if(skclrcmp(image_data, colors[colorIndex], pl) < skcmp(image_data, empty, pl)) {
-			draw_point_shape(&empty, pl, colors[colorIndex]);
+		if(skutil_color_cmp(input_image, source_colors[colorIndex], pl) < skutil_cmp(input_image, canvas, pl)) {
+			sketcher_draw_point_shape(&canvas, pl, source_colors[colorIndex]);
 		}
 		
-		delete_point_shape(pl);
+		sketcher_delete_point_shape(pl);
 		
 		//thread???
 		if(as.sequence_mode && i%1600 == 0) {
@@ -64,12 +63,12 @@ int main(int argc, char** argv) {
 				return 1;
 			}
 
-			create_png(&empty, fp);
+			pngfile_create(&canvas, fp);
 			fclose(fp);
 		}
 
 		printf("Creating sketch... ");
-		print_bar(50, i, as.iterations);
+		bar_print(50, i, as.iterations);
 	}
 
 	FILE* fp;
@@ -77,13 +76,13 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-	create_png(&empty, fp);
+	pngfile_create(&canvas, fp);
 	fclose(fp);
 
 	printf("\n");
 
-	destroy_img_data(&image_data);
-	destroy_img_data(&empty);
+	imagedata_destroy(&input_image);
+	imagedata_destroy(&canvas);
 	fclose(image);
 
 	return 0;

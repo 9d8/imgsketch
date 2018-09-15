@@ -1,12 +1,9 @@
-#include "pixmap.h"
+#include "imagedata.h"
 #include <stdlib.h>
 
-
-//We may be able to improve upon this once I figure out how to write to a png file
-void create_empty_img_data(struct img_data* data, int width, int height) {
+void imagedata_create_empty(struct imagedata* data, int width, int height) {
 	uint8_t** row_pointers = malloc(sizeof(uint8_t*) * height);
 	for(int y = 0; y < height; y++) {
-		//technically this is hard coding :(
 		row_pointers[y] = calloc(width, 4*sizeof(uint8_t));
 	}
 
@@ -15,7 +12,7 @@ void create_empty_img_data(struct img_data* data, int width, int height) {
 	data->rows = row_pointers;
 }
 
-void destroy_img_data(struct img_data* data) {	
+void imagedata_destroy(struct imagedata* data) {	
 	for(int y = 0; y < data->height; y++) {
 		free(data->rows[y]);
 	}

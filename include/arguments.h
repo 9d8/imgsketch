@@ -10,6 +10,6 @@ struct arg_settings {
 	unsigned int max_size;
 };
 
-int parse_args(int argc, char** argv, struct arg_settings* as);
+int arguments_parse(int argc, char** argv, struct arg_settings* as);
 
 #endif

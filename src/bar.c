@@ -4,11 +4,11 @@
 
 time_t timer;
 
-void start_stopwatch() {
+void bar_start_stopwatch() {
 	time(&timer);
 }
 
-void print_bar(int width, int progress, int done) {
+void bar_print(int width, int progress, int done) {
 	int seconds = difftime(time(NULL), timer);
 	int minutes = seconds/60;
 	int hours = minutes/60;

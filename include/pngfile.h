@@ -2,10 +2,10 @@
 #define PNGFILE_H_
 
 #include <stdio.h>
-#include "pixmap.h"
+#include "imagedata.h"
 
-int is_png(FILE* file); 
-int get_png_data(FILE* png_file, struct img_data* data);
-int create_png(struct img_data* data, FILE* image);
+int pngfile_is_png(FILE* file); 
+int pngfile_get_data(FILE* png_file, struct imagedata* data);
+int pngfile_create(struct imagedata* data, FILE* image);
 
 #endif

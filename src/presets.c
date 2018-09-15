@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include "sketcher.h"
 
-int plus_minus_rand_range(int min, int max);
+static int plus_minus_rand_range(int min, int max);
 
-struct point_list* random_segment(int minlen, int maxlen, int width, int height) {
+struct point_list* presets_random_segment(int minlen, int maxlen, int width, int height) {
 	int x1Rand = rand()%(width-1);
 	int x2Rand = x1Rand + plus_minus_rand_range(minlen, maxlen);
 	int y1Rand = rand()%(height-1);
@@ -22,23 +22,23 @@ struct point_list* random_segment(int minlen, int maxlen, int width, int height)
 		y2Rand = height - 1;
 	}
 	
-	return sketch_segment(x1Rand, y1Rand, x2Rand, y2Rand, 1);
+	return sketcher_sketch_segment(x1Rand, y1Rand, x2Rand, y2Rand, 1);
 }
 
-struct point_list* random_square(int minlen, int maxlen, int width, int height) {
+struct point_list* presets_random_square(int minlen, int maxlen, int width, int height) {
 	int xRand = rand()%(width-1);
 	int yRand = rand()%(height-1);
 	int sRand = rand()%(maxlen - minlen + 1) + minlen;
 
-	return sketch_rectangle(xRand, yRand, sRand, sRand, width, height);
+	return sketcher_sketch_rectangle(xRand, yRand, sRand, sRand, width, height);
 }
 
-struct point_list* random_circle(int minrad, int maxrad, int width, int height) {
+struct point_list* presets_random_circle(int minrad, int maxrad, int width, int height) {
 	int xRand = rand()%(width-1);
 	int yRand = rand()%(height-1);
 	int rRand = rand()%maxrad;
 
-	return sketch_circle(xRand, yRand, rRand, width, height);
+	return sketcher_sketch_circle(xRand, yRand, rRand, width, height);
 }
 
 int plus_minus_rand_range(int min, int max) {

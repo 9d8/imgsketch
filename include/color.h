@@ -10,6 +10,6 @@ struct color {
 	uint8_t alpha;
 };
 
-int color_distance(struct color c1, struct color c2);
+int color_get_distance(struct color c1, struct color c2);
 
 #endif

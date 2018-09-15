@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-struct point_list* sketch_segment(int x1, int y1, int x2, int y2, int width) {
+struct point_list* sketcher_sketch_segment(int x1, int y1, int x2, int y2, int width) {
 	struct point_list dummy;
 	struct point_list* curr = &dummy;
 	dummy.next = NULL;
@@ -68,7 +68,7 @@ struct point_list* sketch_segment(int x1, int y1, int x2, int y2, int width) {
 	return dummy.next;
 }
 
-struct point_list* sketch_rectangle(int x, int y, int width, int height, int x_bound, int y_bound) {
+struct point_list* sketcher_sketch_rectangle(int x, int y, int width, int height, int x_bound, int y_bound) {
 	struct point_list dummy;
 	struct point_list* curr = &dummy;
 	dummy.next = NULL;
@@ -95,11 +95,11 @@ struct point_list* sketch_rectangle(int x, int y, int width, int height, int x_b
 	return dummy.next;
 }
 
-void draw_point_shape(struct img_data* image, struct point_list* shape, struct color color) {
+void sketcher_draw_point_shape(struct imagedata* image, struct point_list* shape, struct color color) {
 	struct point_list* curr = shape;
 
 	while(curr != NULL) {
-		sk_set_point_color(image, curr->x, curr->y, color);
+		skutil_set_point_color(image, curr->x, curr->y, color);
 		
 		//struct color c;
 	    //c = sk_get_point_color(*image, curr->x, curr->y);
@@ -109,7 +109,7 @@ void draw_point_shape(struct img_data* image, struct point_list* shape, struct c
 	}
 }
 
-struct point_list* sketch_circle(int x, int y, int radius, int x_bound, int y_bound) {
+struct point_list* sketcher_sketch_circle(int x, int y, int radius, int x_bound, int y_bound) {
 	struct point_list dummy;
 	struct point_list* curr = &dummy;
 	dummy.next = NULL;
@@ -135,7 +135,7 @@ struct point_list* sketch_circle(int x, int y, int radius, int x_bound, int y_bo
 	return dummy.next;
 }	
 
-void delete_point_shape(struct point_list* shape) {
+void sketcher_delete_point_shape(struct point_list* shape) {
 	struct point_list* curr = shape;
 	struct point_list* next;
 
