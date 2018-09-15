@@ -4,7 +4,7 @@
 #include "pngfile.h"
 #include "sketcher.h"
 #include "presets.h"
-#include "lib/bar.h"
+#include "bar.h"
 #include "arguments.h"
 
 int main(int argc, char** argv) {	
