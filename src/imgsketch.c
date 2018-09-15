@@ -40,12 +40,11 @@ int main(int argc, char** argv) {
 	struct color* source_colors = skutil_source_colors(input_image);
 	
 	bar_start_stopwatch();
+	printf("Creating sketch %s...\n", as.outfile);
 	for(int i = 0; i < as.iterations; i++) {
 		int colorIndex = rand()%(input_image.width*input_image.height - 1);
 	
-		//struct point_list* pl = random_square(as.min_size, as.max_size, input_image.width, input_image.height);
-		//struct point_list* pl = random_circle(5, 20, input_image.width, input_image.height);
-		struct point_list* pl = presets_random_segment(5, 20, input_image.width, input_image.height);
+		struct point_list* pl = as.preset(5, 20, input_image.width, input_image.height);
 
 		if(skutil_color_cmp(input_image, source_colors[colorIndex], pl) < skutil_cmp(input_image, canvas, pl)) {
 			sketcher_draw_point_shape(&canvas, pl, source_colors[colorIndex]);
@@ -67,7 +66,6 @@ int main(int argc, char** argv) {
 			fclose(fp);
 		}
 
-		printf("Creating sketch... ");
 		bar_print(50, i, as.iterations);
 	}
 
