@@ -5,29 +5,50 @@ TARGET=imgsketch
 BUILDDIR=build
 INCLUDEDIRS=include
 SRCDIR=src
+TESTDIR=tests
 
 CFLAGS=
 LIBS=m png
 
 ############################################
 
-OBJECTS=$(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.o,$(wildcard $(SRCDIR)/*.c))
 INCLUDE=$(patsubst %,-I%,$(INCLUDEDIRS))
-LIB=$(patsubst %,-l%,$(LIBS))
+EXTERNLIB=$(patsubst %,-l%,$(LIBS))
+
+TARGETOBJECT=$(BUILDDIR)/$(TARGET).o
+
+OBJECTS=$(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.o,$(wildcard $(SRCDIR)/*.c))
+OBJECTS:=$(filter-out $(TARGETOBJECT),$(OBJECTS))
+
+TESTS=$(patsubst $(TESTDIR)/%.c,$(BUILDDIR)/%,$(wildcard $(TESTDIR)/*.c))
+TESTOBJECTS=$(patsubst %,%.o,$(TESTS))
+
+all: $(TARGET)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) -c -o $@ $< $(INCLUDE) $(LIB)
+	$(CC) $(CFLAGS) -c -o $@ $< $(INCLUDE) $(EXTERNLIB)
 
-$(TARGET): mkdir $(OBJECTS)
-	$(CC) $(CFLAGS) -o $(BUILDDIR)/$@ $(OBJECTS) $(INCLUDE) $(LIB)
+$(BUILDDIR)/%.o: $(TESTDIR)/%.c
+	$(CC) $(CFLAGS) -c -o $@ $< $(INCLUDE) $(EXTERNLIB)
 
-.PHONY: debug clean mkdir
+# Make build directory when trying to create an object file
+$(TESTOBJECTS) $(TARGETOBJECT) $(OBJECTS): | $(BUILDDIR)  
+
+$(TARGET): $(TARGETOBJECT) $(OBJECTS)
+	$(CC) $(CFLAGS) -o $(BUILDDIR)/$@ $^ $(INCLUDE) $(EXTERNLIB)
+
+$(TESTS): $(TESTOBJECTS) $(OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $@.o $(OBJECTS) $(INCLUDE) $(EXTERNLIB)
+
+$(BUILDDIR):
+	mkdir $(BUILDDIR)
+
+.PHONY: tests debug clean
+
+tests: $(TESTS)
 
 debug: CFLAGS:=$(CFLAGS)-ggdb
 debug: $(TARGET)
 
 clean:
-	-rm $(BUILDDIR)/$(TARGET) $(OBJECTS) 2>/dev/null
-
-mkdir:
-	@-mkdir $(BUILDDIR) || true
+	-rm $(BUILDDIR)/$(TARGET) $(TARGETOBJECT) $(OBJECTS) $(TESTS) $(TESTOBJECTS) 2>/dev/null
