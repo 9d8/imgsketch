@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
 		int color_col_index = rand()%(input_image.width);
 		struct color source_color = skutil_get_point_color(input_image, color_col_index, color_row_index);
 	
-		struct point_list* pl = as.preset(5, 20, input_image.width, input_image.height);
+		struct point_list* pl = as.preset(as.min_size, as.max_size, input_image.width, input_image.height);
 
 		if(skutil_color_cmp(input_image, source_color, pl) < skutil_cmp(input_image, canvas, pl)) {
 			sketcher_draw_point_shape(&canvas, pl, source_color);
