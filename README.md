@@ -1,4 +1,4 @@
-# imagesketch
+# imgsketch
 
 Create a sketch of an image. 
 
