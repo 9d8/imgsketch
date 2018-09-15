@@ -25,7 +25,7 @@
 
 time_t timer;
 
-void bar_start_stopwatch() {
+void bar_start_stopwatch(void) {
 	time(&timer);
 }
 
