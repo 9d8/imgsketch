@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
 	
 	struct arg_settings as;
 	if(parse_args(argc, argv, &as)) {
-		printf("Need path argument");
+		printf("Need path argument.\n");
 		return 1;	
 	}
 
@@ -19,19 +19,19 @@ int main(int argc, char** argv) {
 	FILE* image = fopen(as.infile, "rb");
 
 	if(image == NULL) {	
-		printf("%s does not exist\n", as.infile);
+		printf("%s does not exist.\n", as.infile);
 		return 2;
 	}
 
 	if(!is_png(image)) {
-		printf("Not a png file\n");
+		printf("%s is not a png file.\n", as.infile);
 		return 3;
 	}
 
 	struct img_data image_data;
 	get_png_data(image, &image_data);
 
-	printf("This is a png file with dimentions %ix%i\n", image_data.width, image_data.height);
+	printf("This is a png file with dimentions %ix%i.\n", image_data.width, image_data.height);
 
 	srand(time(NULL));
 

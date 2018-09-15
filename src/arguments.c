@@ -8,11 +8,11 @@ char* help_string = "Usage: imgsketch [OPTIONS] png\n"
 					"Make a sketch of a png file.\n"
 					"\n"
 					"Options:\n"
-					" -h\t\tprint this help\n"
-					" -l\t\tset the amount of iterations to perform (default: 1000000)\n"
-					" -s\t\tenable sequencing mode (for creating ffmpeg image sequences)\n" 
-					" -m\t\tminimum shape size (default: 5)\n"
-					" -M\t\tmaximum shape size (default: 20)\n";
+					" -h\t\tPrint this help.\n"
+					" -l\t\tSet the amount of iterations to perform. (default: 1000000)\n"
+					" -s\t\tEnable sequencing mode (for creating ffmpeg image sequences).\n" 
+					" -m\t\tMinimum shape size. (default: 5)\n"
+					" -M\t\tMaximum shape size. (default: 20)\n";
 
 int parse_args(int argc, char** argv, struct arg_settings* as) {
 	char* optstring = "l:shm:M:";
