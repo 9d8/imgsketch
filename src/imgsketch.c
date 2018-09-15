@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
 		if(as.sequence_mode && i%1600 == 0) {
 			FILE* fp;
 			char name[15];
-			sprintf(name, "cache/%003i.png", i/1600);
+			sprintf(name, "cache/%005i.png", i/1600);
 
 			if((fp = fopen(name, "wb")) == NULL) {
 				return 1;
