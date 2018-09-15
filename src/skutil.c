@@ -23,22 +23,6 @@ void skutil_set_point_color(struct imagedata* d, int x, int y, struct color colo
 	d->rows[y][rowX + 3] = color.alpha;
 }
 
-struct color* skutil_source_colors(struct imagedata source) {
-	struct color source_colors[source.height*source.width];
-	int i = 0;
-
-	for(int y = 0; y < source.height; y++) {
-		for(int x = 0; x < source.width; x++) {
-			//could improve results by preventing duplicates (sets)
-			source_colors[i++] = skutil_get_point_color(source, x, y);	
-		}
-	}
-	
-	struct color* scp = source_colors;
-	return scp;
-}
-
-
 int skutil_cmp(struct imagedata source, struct imagedata sketch, struct point_list* cmp_points) {
 	int score = 0;
 		

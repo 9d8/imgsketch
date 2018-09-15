@@ -37,17 +37,17 @@ int main(int argc, char** argv) {
 	struct imagedata canvas;
 	imagedata_create_empty(&canvas, input_image.width, input_image.height);
 		
-	struct color* source_colors = skutil_source_colors(input_image);
-	
 	bar_start_stopwatch();
 	printf("Creating sketch %s...\n", as.outfile);
 	for(int i = 0; i < as.iterations; i++) {
-		int colorIndex = rand()%(input_image.width*input_image.height - 1);
+		int color_row_index = rand()%(input_image.height);
+		int color_col_index = rand()%(input_image.width);
+		struct color source_color = skutil_get_point_color(input_image, color_col_index, color_row_index);
 	
 		struct point_list* pl = as.preset(5, 20, input_image.width, input_image.height);
 
-		if(skutil_color_cmp(input_image, source_colors[colorIndex], pl) < skutil_cmp(input_image, canvas, pl)) {
-			sketcher_draw_point_shape(&canvas, pl, source_colors[colorIndex]);
+		if(skutil_color_cmp(input_image, source_color, pl) < skutil_cmp(input_image, canvas, pl)) {
+			sketcher_draw_point_shape(&canvas, pl, source_color);
 		}
 		
 		sketcher_delete_point_shape(pl);
