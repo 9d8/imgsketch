@@ -28,8 +28,15 @@
 #include "bar.h"
 #include "arguments.h"
 
+#ifdef JPEG_SUPPORT
+#include "jpegfile.h"
+#endif
+
 int main(int argc, char** argv) {	
-	
+	int (*imagefile_get_data)(FILE* imagefile, struct imagedata* data);
+	int (*imagefile_create)(struct imagedata* data, FILE* image);
+	char* image_type;
+
 	struct arg_settings as;
 	if(arguments_parse(argc, argv, &as)) {
 		printf("Need path argument.\n");
@@ -43,15 +50,28 @@ int main(int argc, char** argv) {
 		return 2;
 	}
 
-	if(!pngfile_is_png(image)) {
+
+	if(pngfile_is_png(image)) {
+		imagefile_get_data = &pngfile_get_data;
+		imagefile_create = &pngfile_create;
+		image_type = "png";
+#ifdef JPEG_SUPPORT
+	} else if(jpegfile_is_jpeg(image)) {
+		imagefile_get_data = &jpegfile_get_data;
+		image_type = "jpeg";
+	} else {
+		printf("%s is not a recognized format.\n", as.infile);
+#else
+	} else {
 		printf("%s is not a png file.\n", as.infile);
+#endif
 		return 3;
 	}
 
 	struct imagedata input_image;
-	pngfile_get_data(image, &input_image);
+	imagefile_get_data(image, &input_image);
 
-	printf("This is a png file with dimentions %ix%i.\n", input_image.width, input_image.height);
+	printf("This is a %s file with dimentions %ix%i.\n", image_type, input_image.width, input_image.height);
 
 	srand(time(NULL));
 

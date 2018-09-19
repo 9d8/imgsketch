@@ -24,16 +24,13 @@
 #include <stdlib.h>
 
 int pngfile_is_png(FILE* file) {
-	int result = 1;
-
+	// Rewind in case file has been read from already.
 	rewind(file);	
+	
 	char header[8];
 	fread(header, 1, 8, file);
-	if(png_sig_cmp(header, 0, 8)) {
-		result = 0;
-	}
 
-	return result;
+	return !png_sig_cmp(header, 0, 8);
 }
 
 int pngfile_get_data(FILE* png_file, struct imagedata* data) {
@@ -107,7 +104,9 @@ int pngfile_get_data(FILE* png_file, struct imagedata* data) {
 	
 	data->width = width;
 	data->height = height;
-	data->rows = (unsigned char**) row_pointers;
+	data->rows = (uint8_t**) row_pointers;
+	data->alpha_channel = 1;
+
 	png_destroy_read_struct(&png, &info, NULL);
 	return 0;
 }

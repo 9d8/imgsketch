@@ -25,23 +25,28 @@
 struct color skutil_get_point_color(struct imagedata d, int x, int y) {
 	struct color color; 
 
-	int rowX = x * 4;
+	/* Subtracting the boolean value for alpha_channel from 4 is a suprisingly
+	 * useful hack to obtain the total number of channels */
+	int rowX = x * (4 - !d.alpha_channel);
 
 	color.red = d.rows[y][rowX];
 	color.green = d.rows[y][rowX + 1];
 	color.blue = d.rows[y][rowX + 2];
-	color.alpha = d.rows[y][rowX + 3];
+	color.alpha = d.alpha_channel? d.rows[y][rowX + 3] : 0xFF;
 
 	return color;
 }
 
 void skutil_set_point_color(struct imagedata* d, int x, int y, struct color color) {
-	int rowX = x * 4;
+	int rowX = x * (4 - !d->alpha_channel);
 
 	d->rows[y][rowX] = color.red;
 	d->rows[y][rowX + 1] = color.green;
 	d->rows[y][rowX + 2] = color.blue; 
-	d->rows[y][rowX + 3] = color.alpha;
+
+	if(d->alpha_channel) {
+		d->rows[y][rowX + 3] = color.alpha;
+	}
 }
 
 int skutil_cmp(struct imagedata source, struct imagedata sketch, struct point_list* cmp_points) {

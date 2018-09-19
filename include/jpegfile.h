@@ -19,19 +19,14 @@
 	https://github.com/9d8/tmm/
 */
 
-#ifndef IMAGEDATA_H_
-#define IMAGEDATA_H_
+#ifndef JPEGFILE_H_
+#define JPEGFILE_H_
 
-#include <stdint.h>
+#include <stdio.h>
+#include "imagedata.h"
 
-struct imagedata {
-	int width;
-	int height;
-	uint8_t** rows;
-	int alpha_channel;
-};
-
-void imagedata_create_empty(struct imagedata* data, int width, int height);
-void imagedata_destroy(struct imagedata* data);
+int jpegfile_is_jpeg(FILE* file); 
+int jpegfile_get_data(FILE* jpeg_file, struct imagedata* data);
+int jpegfile_create(struct imagedata* data, FILE* image);
 
 #endif
