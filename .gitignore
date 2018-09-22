@@ -5,3 +5,5 @@ build/
 cache/*
 
 !markdown/*.png
+!markdown/*.jpg
+!markdown/*.webm
