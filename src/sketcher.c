@@ -103,8 +103,8 @@ struct point_list* sketcher_sketch_rectangle(int x, int y, int width, int height
 					&& draw_y >= 0 && draw_y < y_bound) {
 				struct point_list* node = malloc(sizeof(struct point_list));
 				
-				node->x = x + w;
-				node->y = y + h;
+				node->x = draw_x;
+				node->y = draw_y;
 
 				curr->next = node;
 				curr = curr->next;
@@ -115,6 +115,31 @@ struct point_list* sketcher_sketch_rectangle(int x, int y, int width, int height
 	curr->next = NULL;
 	return dummy.next;
 }
+
+struct point_list* sketcher_sketch_circle(int x, int y, int radius, int x_bound, int y_bound) {
+	struct point_list dummy;
+	struct point_list* curr = &dummy;
+	dummy.next = NULL;
+	
+	for(int h=-radius; h<=radius; h++) {
+		for(int w=-radius; w<=radius; w++) {
+			if(w*w+h*h <= radius*radius + radius 
+					&& x + w >= 0 && x + w < x_bound
+					&& y + h >= 0 && y + h < y_bound) {
+				struct point_list* node = malloc(sizeof(struct point_list));
+				
+				node->x = x + w;
+				node->y = y + h;
+
+				curr->next = node;
+				curr = curr->next;
+			}
+		}
+	}
+
+	curr->next = NULL;
+	return dummy.next;
+}	
 
 void sketcher_draw_point_shape(struct imagedata* image, struct point_list* shape, struct color color) {
 	struct point_list* curr = shape;
@@ -129,32 +154,6 @@ void sketcher_draw_point_shape(struct imagedata* image, struct point_list* shape
 		curr = curr->next;
 	}
 }
-
-struct point_list* sketcher_sketch_circle(int x, int y, int radius, int x_bound, int y_bound) {
-	struct point_list dummy;
-	struct point_list* curr = &dummy;
-	dummy.next = NULL;
-	
-	for(int h=-radius; h<=radius; h++) {
-		for(int w=-radius; w<=radius; w++) {
-			if(w*w+h*h <= radius*radius + radius 
-					&& x - radius >= 0 && x + radius < x_bound
-					&& y - radius >= 0 && y + radius < y_bound) {
-				struct point_list* node = malloc(sizeof(struct point_list));
-				
-				node->x = x + w;
-				node->y = y + h;
-
-				curr->next = node;
-				curr = curr->next;
-			}
-		}
-	}
-
-	
-	curr->next = NULL;
-	return dummy.next;
-}	
 
 void sketcher_delete_point_shape(struct point_list* shape) {
 	struct point_list* curr = shape;
